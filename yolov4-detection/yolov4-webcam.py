@@ -11,7 +11,7 @@ ap.add_argument("-i", "--input", required=False, default=0,
 	help="path to input video")
 ap.add_argument("-y", "--yolo", required=True,
 	help="base path to YOLO directory")
-ap.add_argument("-c", "--confidence", type=float, default=0.5,
+ap.add_argument("-c", "--confidence", type=float, default=0.7,
 	help="minimum probability to filter weak detections")
 ap.add_argument("-t", "--threshold", type=float, default=0.3,
 	help="threshold when applyong non-maxima suppression")
@@ -25,8 +25,8 @@ np.random.seed(42)
 COLORS = np.random.randint(0, 255, size=(len(LABELS), 3),
 	dtype="uint8")
 # derive the paths to the YOLO weights and model configuration
-weightsPath = os.path.sep.join([args["yolo"], "yolov4-p6.weights"])
-configPath  = os.path.sep.join([args["yolo"], "cfg.cfg"])
+weightsPath = os.path.sep.join([args["yolo"], "yolov4-csp.weights"])
+configPath  = os.path.sep.join([args["yolo"], "cfgyolov4-csp.cfg"])
 # load our YOLO object detector trained on COCO dataset (80 classes)
 # and determine only the *output* layer names that we need from YOLO
 print("[INFO] loading YOLO from disk...")
@@ -51,7 +51,7 @@ while rodando:
 		(H, W) = frame.shape[:2]
 
 	
-	blob = cv2.dnn.blobFromImage(frame, 1 / 255.0, (256, 256),
+	blob = cv2.dnn.blobFromImage(frame, 1 / 255.0, (160, 160),
 		swapRB=True, crop=False)
 	net.setInput(blob)
 	start        = time.time()
